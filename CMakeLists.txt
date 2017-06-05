@@ -5,6 +5,8 @@ PROJECT(Voxel-Carving)
 FIND_PACKAGE(VTK REQUIRED)
 FIND_PACKAGE(OpenCV REQUIRED)
 
+include_directories(include)
+
 # required macros and variables
 INCLUDE(${VTK_USE_FILE})
 
