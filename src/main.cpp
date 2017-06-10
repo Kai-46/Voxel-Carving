@@ -1,6 +1,6 @@
 // Code is based on "Straight forward implementation of a 3d reconstruction
-// technique called voxel carving (or space carving)" by reger-men.
-// https://github.com/reger-men/Voxel-Carving
+// technique called voxel carving (or space carving)" by xocoatzin.
+// https://github.com/xocoatzin/Voxel-Carving
 //
 // Modifications by: Valentin Yuryev, yuryevv@student.ethz.ch
 // Modifications allow for use of GrabCut sillhoutes and COLMAP camera/image
