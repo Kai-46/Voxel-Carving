@@ -41,7 +41,7 @@ using namespace cv;
 using namespace std;
 
 
-
+// Constants for voxel carving
 int IMG_WIDTH;
 int IMG_HEIGHT;
 const int VOXEL_DIM = 256;
@@ -90,7 +90,7 @@ void exportModel(char *filename, vtkPolyData *polyData) {
   plyExporter->Write();
 }
 
-
+// Projection of points onto 2D image
 coord project(camera cam, voxel v) {
 
   coord im;
@@ -114,6 +114,7 @@ coord project(camera cam, voxel v) {
   return im;
 }
 
+// Model Rendering
 void renderModel(float fArray[], startParams params) {
 
   /* create vtk visualization pipeline from voxel grid (float array) */
@@ -142,6 +143,7 @@ void renderModel(float fArray[], startParams params) {
   cleanPolyData->SetInputConnection(mcSource->GetOutputPort());
   cleanPolyData->Update();
 
+  // Store the vertices into .ply file
   std::string filename = "output_carved";
   vtkSmartPointer<vtkPLYWriter> plyWriter = vtkSmartPointer<vtkPLYWriter>::New();
   plyWriter->SetFileName(filename.c_str());
@@ -149,6 +151,7 @@ void renderModel(float fArray[], startParams params) {
   plyWriter->Write();
 }
 
+// Carving algorithm
 void carve(float fArray[], startParams params, camera cam) {
 
   cv::Mat silhouette, distImage;
@@ -186,6 +189,7 @@ void carve(float fArray[], startParams params, camera cam) {
 }
 
 int main(int argc, char* argv[]) {
+  // Instructions on how to use the program
   if (argc < 3)
   {
     std::cout << std::endl << "Instructions:" << std::endl;
@@ -195,6 +199,7 @@ int main(int argc, char* argv[]) {
     return 0;
   }
 
+  // Read out folder location and number of images to use
   int num_imgs = strtol(argv[2], NULL, 10);
   std::cout << std::endl << "Number of images: " << num_imgs << std::endl;
   /* acquire camera images, silhouettes and camera matrix */
@@ -209,7 +214,9 @@ int main(int argc, char* argv[]) {
   image_loc << argv[1] << "images.txt";
   fs_image_search.open(image_loc.str().c_str(),std::ios::in);
 
+  // Read camera information line by line
   std::string line;
+  // Parse through the lines and store image ID, size, and camera param
   const char *whitespace    = " \t\r\n\f";
   int count = 0;
   while (std::getline(fs, line ) && count != num_imgs) {
@@ -226,8 +233,7 @@ int main(int argc, char* argv[]) {
 
     strtk::remove_leading_trailing(whitespace, line);
 
-
-    // strtk::parse combines multiple delimiters in these cases
+    // Parse and store camera params
     std::vector<float> floats;
     if( strtk::parse(line, whitespace, floats ) )
     {
@@ -245,6 +251,7 @@ int main(int argc, char* argv[]) {
     std::string search_line;
     float qw, qx, qy, qz, x, y, z;
 
+    // Find image corresponding to image id and store its info
     while (std::getline(fs_image_search, search_line )) {
       std::vector<float> floats_search;
       if( strtk::parse(search_line, whitespace, floats_search ) )
@@ -267,18 +274,20 @@ int main(int argc, char* argv[]) {
       }
     }
 
+    // Find sillhoute corresponding to the image in the given folder
     std::stringstream sil_loc;
     sil_loc << argv[1] << "sil/" << name;
-    /* camera image */
+    // If silhoutte not in the folder continue
     cv::Mat img = cv::imread(sil_loc.str());
     if(! img.data )
     {
         continue;
     }
+    // Store camera, transition, rotation parameters
     std::cout << "Processing scene: " << ID << std::endl;
     std::cout << "Image ID: " << ID << " Image Name: " << name << std::endl;
 
-    /* silhouette */
+    // Scale silhouette to make sure dark parts are 0 and everything else is 255
     cv::Mat silhouette;
     silhouette = img;
     cv::inRange(silhouette, cv::Scalar(0, 0, 20), cv::Scalar(255,255,255), silhouette);
@@ -344,7 +353,7 @@ int main(int argc, char* argv[]) {
 
   std::cout << std::endl << "Beginning Carving" << std::endl;
 
-  /* bounding box dimensions of squirrel */
+  // Normally the model is within 2 meter box
   float xmin = -2, ymin = -2, zmin = -2;
   float xmax = 2, ymax = 2, zmax = 2;
 
@@ -359,7 +368,6 @@ int main(int argc, char* argv[]) {
   params.voxelWidth = bbwidth/VOXEL_DIM;
   params.voxelHeight = bbheight/VOXEL_DIM;
   params.voxelDepth = bbdepth/VOXEL_DIM;
-  cout << "startParams: " << params.startX << " " << params.startY << " " << params.startZ << " " << params.voxelWidth << " " << params.voxelHeight << " " << params.voxelDepth << endl;
 
   /* 3 dimensional voxel grid */
   float *fArray = new float[VOXEL_SIZE];
