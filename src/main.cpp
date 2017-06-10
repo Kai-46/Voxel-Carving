@@ -194,14 +194,14 @@ int main(int argc, char* argv[]) {
   {
     std::cout << std::endl << "Instructions:" << std::endl;
     std::cout << "Input 1: Folder Location that contains camrea.txt, images.txt and folder 'sil'. Example: /home/user/folder/" << std::endl;
-    std::cout << "Input 2: Number of Images in images.txt to look through. Example: 25" << std::endl;
+    std::cout << "Input 2: ID Images in images.txt to look upto. Example: 25 will look up to ID 25" << std::endl;
     std::cout << "Example: ./main /home/user/folder/ 25" << std::endl << std::endl;
     return 0;
   }
 
   // Read out folder location and number of images to use
   int num_imgs = strtol(argv[2], NULL, 10);
-  std::cout << std::endl << "Number of images: " << num_imgs << std::endl;
+  std::cout << std::endl << "Searching up to ID:  " << num_imgs << std::endl;
   /* acquire camera images, silhouettes and camera matrix */
   std::vector<camera> cameras;
   std::fstream fs;
