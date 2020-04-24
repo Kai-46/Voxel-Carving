@@ -144,7 +144,7 @@ void renderModel(float fArray[], startParams params) {
   cleanPolyData->Update();
 
   // Store the vertices into .ply file
-  std::string filename = "output_carved";
+  std::string filename = "./output_carved";
   vtkSmartPointer<vtkPLYWriter> plyWriter = vtkSmartPointer<vtkPLYWriter>::New();
   plyWriter->SetFileName(filename.c_str());
   plyWriter->SetInputConnection(cleanPolyData->GetOutputPort());
