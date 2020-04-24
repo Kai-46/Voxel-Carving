@@ -226,7 +226,8 @@ int main(int argc, char* argv[]) {
     std::string MODEL;
     int width;
     int height;
-    float f;
+    float fx;
+    float fy;
     float cx;
     float cy;
     float iDontKnow;
@@ -237,12 +238,14 @@ int main(int argc, char* argv[]) {
     std::vector<float> floats;
     if( strtk::parse(line, whitespace, floats ) )
     {
+      assert(line.find("PINHOLE") != -1);
       ID = floats[0];
       IMG_WIDTH = floats[1];
       IMG_HEIGHT = floats[2];
-      f = floats[3];
-      cx = floats[4];
-      cy = floats[5];
+      fx = floats[3];
+      fy = floats[4]
+      cx = floats[5];
+      cy = floats[6];
     }
 
     int j = 0;
@@ -300,8 +303,8 @@ int main(int argc, char* argv[]) {
     P = cv::Mat::eye(3, 3, CV_32FC1);
 
     K = cv::Mat::eye(3, 3, CV_32FC1);
-    K.at<float>(0,0) = f; /* fx */
-    K.at<float>(1,1) = f; /* fy */
+    K.at<float>(0,0) = fx; /* fx */
+    K.at<float>(1,1) = fy; /* fy */
     K.at<float>(0,2) = cx; /* cx */
     K.at<float>(1,2) = cy; /* cy */
     c.K = K;
