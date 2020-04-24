@@ -115,7 +115,7 @@ coord project(camera cam, voxel v) {
 }
 
 // Model Rendering
-void renderModel(float fArray[], startParams params) {
+void renderModel(float fArray[], startParams params, std::string filename) {
 
   /* create vtk visualization pipeline from voxel grid (float array) */
   vtkSmartPointer<vtkStructuredPoints> sPoints = vtkSmartPointer<vtkStructuredPoints>::New();
@@ -144,7 +144,8 @@ void renderModel(float fArray[], startParams params) {
   cleanPolyData->Update();
 
   // Store the vertices into .ply file
-  std::string filename = "./output_carved";
+  // std::string filename = "./output_carved";
+  std::cout << "Writing to " << filename << "\n";
   vtkSmartPointer<vtkPLYWriter> plyWriter = vtkSmartPointer<vtkPLYWriter>::New();
   plyWriter->SetFileName(filename.c_str());
   plyWriter->SetInputConnection(cleanPolyData->GetOutputPort());
@@ -190,12 +191,13 @@ void carve(float fArray[], startParams params, camera cam) {
 
 int main(int argc, char* argv[]) {
   // Instructions on how to use the program
-  if (argc < 3)
+  if (argc < 4)
   {
     std::cout << std::endl << "Instructions:" << std::endl;
     std::cout << "Input 1: Folder Location that contains camrea.txt, images.txt and folder 'sil'. Example: /home/user/folder/" << std::endl;
     std::cout << "Input 2: ID Images in images.txt to look upto. Example: 25 will look up to ID 25" << std::endl;
-    std::cout << "Example: ./main /home/user/folder/ 25" << std::endl << std::endl;
+    std::cout << "Input 3: path to output ply file" << std::endl;
+    std::cout << "Example: ./main /home/user/folder/ 25 ./output_carved.ply" << std::endl << std::endl;
     return 0;
   }
 
@@ -206,13 +208,20 @@ int main(int argc, char* argv[]) {
   std::vector<camera> cameras;
   std::fstream fs;
   std::stringstream folder_loc;
+
   folder_loc << argv[1] << "cameras.txt";
   fs.open(folder_loc.str().c_str(), std::ios::in);
+  if (!fs) {
+    std::cout << "Failed to open " << folder_loc.str() << "\n";
+  }
 
   std::fstream fs_image_search;
   std::stringstream image_loc;
   image_loc << argv[1] << "images.txt";
   fs_image_search.open(image_loc.str().c_str(),std::ios::in);
+  if (!fs_image_search) {
+    std::cout << "Failed to open " << folder_loc.str() << "\n";
+  }
 
   // Read camera information line by line
   std::string line;
@@ -243,7 +252,7 @@ int main(int argc, char* argv[]) {
       IMG_WIDTH = floats[1];
       IMG_HEIGHT = floats[2];
       fx = floats[3];
-      fy = floats[4]
+      fy = floats[4];
       cx = floats[5];
       cy = floats[6];
     }
@@ -264,6 +273,7 @@ int main(int argc, char* argv[]) {
           strtk::parse(search_line, whitespace, strings );
 
           name = strings[9];
+
 
           qw = floats_search[1];
           qx = floats_search[2];
@@ -367,7 +377,7 @@ int main(int argc, char* argv[]) {
   startParams params;
   params.startX = xmin-std::abs(xmax-xmin)*0.15;
   params.startY = ymin-std::abs(ymax-ymin)*0.15;
-  params.startZ = 0.0f;
+  params.startZ = zmin-std::abs(zmax-zmin)*0.15;
   params.voxelWidth = bbwidth/VOXEL_DIM;
   params.voxelHeight = bbheight/VOXEL_DIM;
   params.voxelDepth = bbdepth/VOXEL_DIM;
@@ -382,7 +392,9 @@ int main(int argc, char* argv[]) {
     carve(fArray, params, cameras.at(i));
   }
 
-  renderModel(fArray, params);
+  std::stringstream ply_loc;
+  ply_loc << argv[3];
+  renderModel(fArray, params, ply_loc.str());
 
   return 0;
 }

@@ -40,7 +40,8 @@ RUN apt-get update && apt install -y python-vtk libvtk5-dev
 ### build voxel-carving
 RUN mkdir /tools
 WORKDIR /tools
-RUN git clone https://github.com/Kai-46/Voxel-Carving.git
+# RUN git clone https://github.com/Kai-46/Voxel-Carving.git
+ADD . /tools/Voxel-Carving
 
 RUN mkdir /tools/Voxel-Carving/build
 WORKDIR /tools/Voxel-Carving/build
