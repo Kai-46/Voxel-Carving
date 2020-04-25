@@ -367,12 +367,13 @@ int main(int argc, char* argv[]) {
   std::cout << std::endl << "Beginning Carving" << std::endl;
 
   // Normally the model is within 2 meter box
-  float xmin = -2, ymin = -2, zmin = -2;
-  float xmax = 2, ymax = 2, zmax = 2;
+  float radius = 1.2;
+  float xmin = -radius, ymin = -radius, zmin = -radius;
+  float xmax = radius, ymax = radius, zmax = radius;
 
   float bbwidth = std::abs(xmax-xmin)*1.15;
   float bbheight = std::abs(ymax-ymin)*1.15;
-  float bbdepth = std::abs(zmax-zmin)*1.05;
+  float bbdepth = std::abs(zmax-zmin)*1.15;
 
   startParams params;
   params.startX = xmin-std::abs(xmax-xmin)*0.15;
