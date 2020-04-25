@@ -5,7 +5,7 @@ Voxel-Carving
 
 Straight forward implementation of a 3d reconstruction technique called voxel carving (or space carving).
 
-This is a modified of the Voxel-Carving algorithm for use with COLMAP output file.
+This is a modified of the Voxel-Carving algorithm for use with COLMAP output file (See [this page](https://colmap.github.io/format.html)).
 
 **Git-clone the repo**
 
