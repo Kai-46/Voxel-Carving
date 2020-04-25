@@ -26,6 +26,6 @@ docker run \
 
 **Run voxel-carving in the container**
 ```bash
-voxel-carving ./samples/ 50 ./carved_shape.ply
+voxel-carving ./example/ 50 ./carved_shape.ply
 ```
 

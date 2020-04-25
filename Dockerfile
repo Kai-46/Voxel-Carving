@@ -51,3 +51,5 @@ RUN make -j$(($(nproc) - 1))
 ### add to /usr/local/bin
 RUN cp /tools/Voxel-Carving/build/main /usr/local/bin/voxel-carving
 RUN chmod a+x /usr/local/bin/voxel-carving
+
+WORKDIR /tools/Voxel-Carving
