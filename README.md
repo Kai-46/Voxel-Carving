@@ -1,4 +1,8 @@
-Voxel-Carving (Shape-from-Sihouette/Visual Hull Intersection)
+Voxel-Carving
+=============
+Shape-from-Sihouette
+=============
+Visual Hull Intersection
 =============
 
 Straight forward implementation of a 3d reconstruction technique called voxel carving (or space carving).
