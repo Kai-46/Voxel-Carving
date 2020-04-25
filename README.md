@@ -29,3 +29,8 @@ docker run \
 voxel-carving ./example/ 50 ./carved_shape.ply
 ```
 
+**See help**
+```bash
+voxel-carving -h
+```
+
